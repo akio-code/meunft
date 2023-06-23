@@ -1,7 +1,12 @@
 {
   "description": "Pescadores no rio Caraíva", 
-  "external_url": "https://openseacreatures.io/3", 
-  "image": "https://storage.googleapis.com/opensea-prod.appspot.com/puffs/3.png", 
+  "image": "https://lucastreze.github.io/meunft/IMG_2672.JPG", 
   "name": "Pescadores no rio Caraíva",
-  "attributes": []
+  "attributes": [
+    {
+      "display_type": "date", 
+      "trait_type": "taken", 
+      "value": 1666286708
+    }
+  ]
 }
