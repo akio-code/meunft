@@ -18,6 +18,19 @@
             <figcaption><span id="nftDesc">&nbsp;</span></figcaption>
         </figure>
     </section>
+
+    <section class="p-5">
+        <h3>Create new NFT</h3>
+        <form action="" name="mintForm" id="mintForm" method="get">
+            <label for="formTo">Para:</label>
+            <input type="text" name="formTo" id="formTo" required>
+            <label>URI metadados:
+                <input type="text" name="formMeta" id="formMeta" required>
+            </label>
+            <button type="button" onclick="mintNFT()">Gerar NFT</button>
+        </form>
+    </section>
+
     <section class="p-5">
         <h4>Rede e Infra</h4>
         <code>
@@ -26,9 +39,11 @@
         </code>
     </section>
 
+
+
     <script src="abi.js"></script>
-    <script type="module">
-        import { ethers } from "https://cdnjs.cloudflare.com/ajax/libs/ethers/6.6.1/ethers.min.js";
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.6.1/ethers.umd.min.js"></script>
+    <script>
         async function init() {
             if (window.ethereum == null) {
                 // If MetaMask is not installed, we use the default provider,
@@ -48,7 +63,7 @@
                 alert("O Metamask irá pedir aprovação para acessar essa página.\nPor favor, aceite.");
                 signer = await provider.getSigner();
                 network = await provider.getNetwork();
-                contract = new ethers.Contract("0x20CdEA20d8180a4F59f908d329A811D898136ED5", abi, provider);
+                contract = new ethers.Contract("0x20CdEA20d8180a4F59f908d329A811D898136ED5", abi, signer);
                 console.log("selected provider: ", provider);
                 console.log("network:", network);
                 console.log("signer: ", signer);
@@ -69,7 +84,7 @@
                 nftNome.innerHTML = nftNomeObj;
 
                 /// Load meta
-                const metadadosURL = await contract.tokenURI(0);
+                const metadadosURL = await contract.tokenURI(1);
                 console.log("metadadosURL: ", metadadosURL);
                 const metadadadosResp = await fetch(metadadosURL);
                 console.log("metadadadosResp: ", metadadadosResp);
@@ -83,6 +98,29 @@
                 divImg.style.display = "block";
             }
         }
+    </script>
+
+    <script>
+        async function mintNFT() {
+            event.preventDefault();
+            const form = document.getElementById("mintForm");
+
+            alert("Aguarde a confirmação no MetaMask");
+
+            console.log(form.formTo.value, form.formMeta.value);
+
+            const tx = await contract.safeMint(form.formTo.value, form.formMeta.value);
+            console.log("tx enviada: ", tx);
+
+            alert("Transação enviada a Blockchain. Aguarde.\nTx ID:" + tx.hash);
+            const txReceipt = await tx.wait();
+            console.log("txReceipt: ", txReceipt);
+            if (txReceipt.status === 1) {
+                alert("Parabéns! Novo NFT gerado");
+                form.reset();
+            }
+        }
+
         let signer = null;
         let provider;
         let network;
