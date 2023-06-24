@@ -19,6 +19,13 @@
         </figure>
     </section>
 
+    <section style="text-align: center">
+        <figure id="divImg2" style="display: none">
+            <img id="imgNFT2" style="width:35vw">
+            <figcaption><span id="nftDesc2">&nbsp;</span></figcaption>
+        </figure>
+    </section>
+
     <section class="p-5">
         <h3>Create new NFT</h3>
         <form action="" name="mintForm" id="mintForm" method="get">
@@ -83,8 +90,8 @@
                 const nftNome = document.getElementById("nftNome");
                 nftNome.innerHTML = nftNomeObj;
 
-                /// Load meta
-                const metadadosURL = await contract.tokenURI(1);
+                /// Load NFT 1
+                const metadadosURL = await contract.tokenURI(0);
                 console.log("metadadosURL: ", metadadosURL);
                 const metadadadosResp = await fetch(metadadosURL);
                 console.log("metadadadosResp: ", metadadadosResp);
@@ -96,6 +103,20 @@
                 imgNFT.src = metadados.image;
                 const divImg = document.getElementById("divImg");
                 divImg.style.display = "block";
+
+                /// Load NFT 1
+                const metadadosURL2 = await contract.tokenURI(1);
+                console.log("metadadosURL: ", metadadosURL2);
+                const metadadadosResp2 = await fetch(metadadosURL2);
+                console.log("metadadadosResp: ", metadadadosResp2);
+                const metadados2 = await metadadadosResp2.json();
+                console.log("metadadadosResp Body: ", metadados2);
+                const nftDesc2 = document.getElementById("nftDesc2");
+                nftDesc2.innerHTML = metadados2.description;
+                const imgNFT2 = document.getElementById("imgNFT2");
+                imgNFT2.src = metadados2.image;
+                const divImg2 = document.getElementById("divImg2");
+                divImg2.style.display = "block";
             }
         }
     </script>
